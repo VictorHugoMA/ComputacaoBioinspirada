@@ -1,11 +1,10 @@
 import random
 import time
 
-#itens = [(2, 5), (3, 8), (5, 13), (7, 15), (9, 24)] # (peso, valor)
 itens = [(5094, 3485), (6506, 326), (416, 5248), (4992, 2421), (4649, 322), (5237, 795), (1457, 3043), (4815, 845), (4446, 4955), (5422, 2252), (2791, 2009), (3359, 6901), (3667, 6122), (1598, 5094), (3007, 738), (3544, 4574), (6334, 3715), (766, 5882), (3994, 5367), (1893, 1984)]
 limiteMochila = 7001
 tamanhoPopulacao = 50
-taxaMutacao = 0.1
+taxaMutacao = 0.3
 numGeracoes = 100
 
 def criarIndividuo():
@@ -21,6 +20,8 @@ def calcularPeso(individuo):
     return sum(individuo[i] * itens[i][0] for i in range(len(individuo)))
 
 def selecao(populacao, k=3):
+    if len(populacao) < k:
+        return None
     torneio = random.sample(populacao, k)
     return max(torneio, key=calcularValor)
 
@@ -53,15 +54,32 @@ def mutacao(individuo):
 def removerExcesso(populacao):
     return [individuo for individuo in populacao if calcularPeso(individuo) <= limiteMochila]
 
+def elitismo(populacao, num_elitismo):
+    sorted_populacao = sorted(populacao, key=calcularValor, reverse=True)
+    return sorted_populacao[:num_elitismo]
+
 def main():
+    if tamanhoPopulacao < 2:
+        print("Tamanho da população muito pequeno. Deve ser pelo menos 2.")
+        return
+
     populacao = [criarIndividuo() for _ in range(tamanhoPopulacao)]
 
     for geracao in range(numGeracoes):
         novaPopulacao = []
 
-        while len(novaPopulacao) < tamanhoPopulacao:
+        elite = elitismo(populacao, num_elitismo=10)
+        novaPopulacao.extend(elite)
+
+        while len(novaPopulacao) < tamanhoPopulacao - len(elite):
             pai1 = selecao(populacao)
+            if pai1 is None:
+                print("Não há indivíduos suficientes para formar o torneio. Encerrando o algoritmo.")
+                return
             pai2 = selecao(populacao)
+            if pai2 is None:
+                print("Não há indivíduos suficientes para formar o torneio. Encerrando o algoritmo.")
+                return
             filho1, filho2 = cruzamento(pai1, pai2)
             mutacao(filho1)
             mutacao(filho2)
@@ -71,16 +89,9 @@ def main():
 
     melhorIndividuo = max(populacao, key=calcularValor)
     valorMelhor = calcularValor(melhorIndividuo)
-    """ pesoMelhor = calcularPeso(melhorIndividuo)
-
-    print("Melhor solução encontrada:")
-    print("Cromossomo:", melhorIndividuo)
-    print("Valor total:", valorMelhor)
-    print("Peso total:", pesoMelhor) """
     print("Valor total:", valorMelhor)
 
 start_time = time.time()
 main()
 execution_time = time.time() - start_time
 print(f"AG - Execution time: {execution_time} seconds")
-
