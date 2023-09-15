@@ -66,18 +66,20 @@ def main():
     
     output_max_values = []
 
-    for iterator in range(1, 5):
-        input_file_path = f"AG/input/input{iterator}.in"
-        n, value, weight, capacity = solve_knapsack_problem(input_file_path)
-        solution, max_value = grasp_knapsack(value, weight, capacity, max_iterations, alpha)
-        output_max_values.append(max_value)
-        output_line = f"Instancia {iterator} : {max_value}\n"
-        
-        with open("AG/output/grasp.out", "a+") as output_file:
-            output_file.write(output_line)
+    #for iterator in range(1, 5):
+    iterator = 1
+    input_file_path = f"AG/input/input{iterator}.in"
+    n, value, weight, capacity = solve_knapsack_problem(input_file_path)
+    solution, max_value = grasp_knapsack(value, weight, capacity, max_iterations, alpha)
+    output_max_values.append(max_value)
+    #output_line = f"Instancia {iterator} : {max_value}\n"
+    print(f"Instancia {iterator} : {max_value}\n")
+    
+    #with open("AG/output/grasp.out", "a+") as output_file:
+     #   output_file.write(output_line)
 
 if __name__ == "__main__":
     start_time = time.time()
     main()
     execution_time = time.time() - start_time
-    print(f"Execution time: {execution_time} seconds")
+    print(f" GRASP - Execution time: {execution_time} seconds")

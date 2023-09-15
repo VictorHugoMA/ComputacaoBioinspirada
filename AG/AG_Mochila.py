@@ -1,7 +1,9 @@
 import random
+import time
 
-itens = [(2, 5), (3, 8), (5, 13), (7, 15), (9, 24)]
-limiteMochila = 20
+#itens = [(2, 5), (3, 8), (5, 13), (7, 15), (9, 24)] # (peso, valor)
+itens = [(5094, 3485), (6506, 326), (416, 5248), (4992, 2421), (4649, 322), (5237, 795), (1457, 3043), (4815, 845), (4446, 4955), (5422, 2252), (2791, 2009), (3359, 6901), (3667, 6122), (1598, 5094), (3007, 738), (3544, 4574), (6334, 3715), (766, 5882), (3994, 5367), (1893, 1984)]
+limiteMochila = 7001
 tamanhoPopulacao = 50
 taxaMutacao = 0.1
 numGeracoes = 100
@@ -51,26 +53,34 @@ def mutacao(individuo):
 def removerExcesso(populacao):
     return [individuo for individuo in populacao if calcularPeso(individuo) <= limiteMochila]
 
-populacao = [criarIndividuo() for _ in range(tamanhoPopulacao)]
+def main():
+    populacao = [criarIndividuo() for _ in range(tamanhoPopulacao)]
 
-for geracao in range(numGeracoes):
-    novaPopulacao = []
+    for geracao in range(numGeracoes):
+        novaPopulacao = []
 
-    while len(novaPopulacao) < tamanhoPopulacao:
-        pai1 = selecao(populacao)
-        pai2 = selecao(populacao)
-        filho1, filho2 = cruzamento(pai1, pai2)
-        mutacao(filho1)
-        mutacao(filho2)
-        novaPopulacao.extend([filho1, filho2])
+        while len(novaPopulacao) < tamanhoPopulacao:
+            pai1 = selecao(populacao)
+            pai2 = selecao(populacao)
+            filho1, filho2 = cruzamento(pai1, pai2)
+            mutacao(filho1)
+            mutacao(filho2)
+            novaPopulacao.extend([filho1, filho2])
 
-    populacao = removerExcesso(novaPopulacao)
+        populacao = removerExcesso(novaPopulacao)
 
-melhorIndividuo = max(populacao, key=calcularValor)
-valorMelhor = calcularValor(melhorIndividuo)
-pesoMelhor = calcularPeso(melhorIndividuo)
+    melhorIndividuo = max(populacao, key=calcularValor)
+    valorMelhor = calcularValor(melhorIndividuo)
+    """ pesoMelhor = calcularPeso(melhorIndividuo)
 
-print("Melhor solução encontrada:")
-print("Cromossomo:", melhorIndividuo)
-print("Valor total:", valorMelhor)
-print("Peso total:", pesoMelhor)
+    print("Melhor solução encontrada:")
+    print("Cromossomo:", melhorIndividuo)
+    print("Valor total:", valorMelhor)
+    print("Peso total:", pesoMelhor) """
+    print("Valor total:", valorMelhor)
+
+start_time = time.time()
+main()
+execution_time = time.time() - start_time
+print(f"AG - Execution time: {execution_time} seconds")
+
