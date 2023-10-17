@@ -1,12 +1,9 @@
 import numpy as np
 from sklearn.model_selection import train_test_split
 
-
-# Definir a função de ativação (degrau)
 def stepFunction(x):
     return 1 if x >= 0 else 0
 
-# Função para treinar o Perceptron
 def treinoPerceptron(X, y, taxaAprendizado, epocas):
     numCaracteristicas = X.shape[1]
     numAmostras = X.shape[0]
@@ -26,7 +23,6 @@ def treinoPerceptron(X, y, taxaAprendizado, epocas):
     
     return peso, vies
 
-# Função para classificar as amostras
 def classificaAmostra(X, peso, vies):
     numAmostras = X.shape[0]
     previsao = []
@@ -104,10 +100,11 @@ X = np.array([
 # Classes (0 para Iris-setosa, 1 para Iris-versicolor)
 y = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 
+"""
 taxaAprendizado = 0.1
 epocas = 100
 
-""" # Treinar o Perceptron
+ # Treinar o Perceptron
 pesoTreinado, viesTreinado = treinoPerceptron(X, y, taxaAprendizado, epocas)
 
 # Dados para classificar
